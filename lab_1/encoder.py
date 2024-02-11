@@ -6,9 +6,9 @@ def encoder(input_file, output_file, shift):
     for char in text:
         if char.isalpha():
             if char.islower():
-                encoder_text += chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+                encoder_text += chr((ord(char) - ord('а') + shift) % 32 + ord('а'))
             else:
-                encoder_text += chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+                encoder_text += chr((ord(char) - ord('А') + shift) % 32 + ord('А'))
         else:
             encoder_text += char
 
@@ -16,7 +16,7 @@ def encoder(input_file, output_file, shift):
         file.write(encoder_text)
 
 
-input_file = 'text.txt'
+input_file = "C:/Users/zhura/Desktop/isb/lab_1/original_text.txt"
 output_file = 'output.txt'
 shift = 3
 
