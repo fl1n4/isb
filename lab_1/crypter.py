@@ -1,7 +1,11 @@
-def encoder(input_file:str, output_file:str, shift:int):
+def encoder(input_file:str,
+            output_file:str,
+            shift:int) -> None:
     """
     a function for encrypting text with monoalphabetic substitution
-    
+    :param input_file: The path to the source text file.
+    :param output_file: The path to the new text file where the modified text will be saved.
+    :param shift: The meaning of the alphabet shift.
     """
     with open(input_file, 'r', encoding='utf-8') as file:
         text = file.read()
@@ -10,9 +14,9 @@ def encoder(input_file:str, output_file:str, shift:int):
     for char in text:
         if char.isalpha():
             if char.islower():
-                encoder_text += chr((ord(char) - ord('а') + shift) % 32 + ord('а'))
+                encoder_text += chr((ord(char) - ord('а') + shift) % 33 + ord('а'))
             else:
-                encoder_text += chr((ord(char) - ord('А') + shift) % 32 + ord('А'))
+                encoder_text += chr((ord(char) - ord('А') + shift) % 33 + ord('А'))
         else:
             encoder_text += char
 
