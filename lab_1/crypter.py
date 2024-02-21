@@ -1,5 +1,8 @@
 def encoder(input_file:str, output_file:str, shift:int):
-    '''a function for encrypting text with monoalphabetic substitution'''
+    """
+    a function for encrypting text with monoalphabetic substitution
+    
+    """
     with open(input_file, 'r', encoding='utf-8') as file:
         text = file.read()
 
