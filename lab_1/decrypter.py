@@ -1,4 +1,8 @@
+import logging
 from typing import List
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 def replace_letter_in_file(input_text:str, 
@@ -16,22 +20,27 @@ def replace_letter_in_file(input_text:str,
     :param new_letter: The letter to replace the target letter with.
     :param indexes: A list of the indexes of the replaced letters.
     """
-    with open(input_text, 'r', encoding='utf-8') as file:
-        default_text = file.read()
+    try:
+        with open(input_text, 'r', encoding='utf-8') as file:
+            default_text = file.read()
 
-    new_text = ""
+        new_text = ""
 
-    for index, letter in enumerate(default_text):
-        if index in indexes:
-            new_text += letter
-        elif letter == target_letter:
-            new_text += new_letter
-            indexes.append(index)
-        else:
-            new_text += letter
+        for index, letter in enumerate(default_text):
+            if index in indexes:
+                new_text += letter
+            elif letter == target_letter:
+                new_text += new_letter
+                indexes.append(index)
+            else:
+                new_text += letter
 
-    with open(output_text, 'w', encoding='utf-8') as new_file:
-        new_file.write(new_text)
+        with open(output_text, 'w', encoding='utf-8') as new_file:
+            new_file.write(new_text)
+    except FileNotFoundError as e:
+        logging.error(f"File not found: {e.filename}")
+    except Exception as e:
+        logging.error(f"An error occurred: {str(e)}")
 
 
 if __name__ == '__main__':
