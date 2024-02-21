@@ -21,9 +21,9 @@ def encoder(input_file:str,
         for char in text:
             if char.isalpha():
                 if char.islower():
-                    encoder_text += chr((ord(char) - ord('а') + shift) % 33 + ord('а'))
+                    encoder_text += chr((ord(char) - ord('а') + shift) % 32 + ord('а'))
                 else:
-                    encoder_text += chr((ord(char) - ord('А') + shift) % 33 + ord('А'))
+                    encoder_text += chr((ord(char) - ord('А') + shift) % 32 + ord('А'))
             else:
                 encoder_text += char
 
