@@ -19,6 +19,6 @@ def encoder(input_file:str, output_file:str, shift:int):
 
 if __name__ == '__main__':
     input_file = "C:/Users/zhura/Desktop/isb/lab_1/original_text.txt"
-    output_file = 'C:/Users/zhura/Desktop/isb/lab_1/output.txt'
+    output_file = 'C:/Users/zhura/Desktop/isb/lab_1/crypted.txt'
     shift = 3
     encoder(input_file, output_file, shift)
