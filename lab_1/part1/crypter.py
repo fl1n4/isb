@@ -22,7 +22,7 @@ def encoder(input_file: str, output_file: str, shift: int) -> None:
 
         for char in text:
             if char.isalpha():
-                base_char = 'a' if char.islower() else 'А'
+                base_char = 'а' if char.islower() else 'А'
                 encoded_char = chr((ord(char) - ord(base_char) + shift) % 32 + ord(base_char))
                 encoder_text += encoded_char
                 encoding_dict[char] = encoded_char
@@ -42,7 +42,7 @@ def encoder(input_file: str, output_file: str, shift: int) -> None:
 
 
 if __name__ == '__main__':
-    input_file = "C:/Users/zhura/Desktop/isb/lab_1/original_text.txt"
-    output_file = 'C:/Users/zhura/Desktop/isb/lab_1/crypted.txt'
+    input_file = "C:/Users/zhura/Desktop/isb/lab_1/part1/original_text.txt"
+    output_file = 'C:/Users/zhura/Desktop/isb/lab_1/part1/crypted.txt'
     shift = 3
     encoder(input_file, output_file, shift)

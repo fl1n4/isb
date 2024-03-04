@@ -42,6 +42,6 @@ def replace_keys_with_values(json_file: str, input_file: str, output_file: str) 
 
 
 if __name__ == '__main__':
-    path_to_input = 'C:/Users/zhura/Desktop/isb/lab_1/cod1.txt'
-    path_to_output = 'C:/Users/zhura/Desktop/isb/lab_1/decrypted_text1.txt'
+    path_to_input = 'C:/Users/zhura/Desktop/isb/lab_1/part1/cod1.txt'
+    path_to_output = 'C:/Users/zhura/Desktop/isb/lab_1/part1/decrypted_text1.txt'
     indexes_new_letters = []
