@@ -1,47 +1,44 @@
+import json
 import logging
-from typing import List
 
 
 logging.basicConfig(level=logging.INFO)
 
 
-def replace_keys_with_values(json_file: str, input_file: str, output_file: str) -> None:
+def replace_letters(json_file_path: str) -> None:
     """
-    Replace keys in the input text file with their corresponding values from the JSON file
-    and write the modified text to the output file.
+    Replaces all characters in the text by the specified key and saves to a new file.
     
-    json_file (str): Path to the JSON file containing key-value pairs.
-    input_file (str): Path to the input text file.
-    output_file (str): Path to the output text file.
+    :param input_file: The path to the source text file.
+    :param output_file: The path to the new text file where the modified text will be saved.
+    :param key: 
     """
     try:
-        with open(json_file, 'r', encoding='utf-8') as f:
-            json_data = json.load(f)
+        with open(json_file_path, 'r', encoding='utf-8') as json_file:
+            params = json.load(json_file)
+        input_file = params.get('input_file')
+        output_file = params.get('output_file')
+        key_file = params.get('key')
     except Exception as e:
-        logging.error(f"An error occurred while reading the JSON file: {e}")
-        return
+        logging.error(f"Error reading the JSON file: {e}")
+
+    with open(input_file, 'r', encoding='utf-8') as file:
+        text = file.read()
+        
+    with open(key_file, 'r', encoding='utf-8') as key_file:
+        key_mapping = json.load(key_file)
+
+    for key, value in key_mapping.items():
+        text = text.replace(value, key)
 
     try:
-        with open(input_file, 'r', encoding='utf-8') as f:
-            original_text = f.read()
-    except Exception as e:
-        logging.error(f"An error occurred while reading the input file: {e}")
-        return
-
-    for key, value in json_data.items():
-        original_text = original_text.replace(key, value)
-
-    try:
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(original_text)
-        logging.info(
-            "Replacement completed successfully. Results written to the output file.")
+        with open(output_file, 'w', encoding='utf-8') as file:
+            file.write(text)
     except Exception as e:
         logging.error(
             f"An error occurred while writing to the output file: {e}")
 
 
 if __name__ == '__main__':
-    path_to_input = 'C:/Users/zhura/Desktop/isb/lab_1/part1/cod1.txt'
-    path_to_output = 'C:/Users/zhura/Desktop/isb/lab_1/part1/decrypted_text1.txt'
-    indexes_new_letters = []
+    json_file_path = 'C:/Users/zhura/Desktop/isb/lab_1/part2/params2.json'
+    replace_letters(json_file_path)
