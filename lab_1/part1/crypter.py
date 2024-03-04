@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def encoder(input_file: str, output_file: str, shift: int) -> None:
+def encoder(json_file_path: str) -> None:
     """
     Encrypts text with monoalphabetic substitution and saves the modified text to a new file.
     
@@ -14,6 +14,14 @@ def encoder(input_file: str, output_file: str, shift: int) -> None:
     :param shift: The meaning of the alphabet shift.
     """
     try:
+        with open(json_file_path, 'r', encoding='utf-8') as json_file:
+            params = json.load(json_file)
+
+        input_file = params.get('input_file')
+        output_file = params.get('output_file')
+        shift = params.get('shift')
+        key_file = params.get('key')
+
         with open(input_file, 'r', encoding='utf-8') as file:
             text = file.read()
 
@@ -32,7 +40,7 @@ def encoder(input_file: str, output_file: str, shift: int) -> None:
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write(encoder_text)
 
-        with open('key1.json', 'w', encoding='utf-8') as json_file:
+        with open(key_file, 'w', encoding='utf-8') as json_file:
             json.dump(encoding_dict, json_file, ensure_ascii=False)
 
     except FileNotFoundError as e:
@@ -42,7 +50,5 @@ def encoder(input_file: str, output_file: str, shift: int) -> None:
 
 
 if __name__ == '__main__':
-    input_file = "C:/Users/zhura/Desktop/isb/lab_1/part1/original_text.txt"
-    output_file = 'C:/Users/zhura/Desktop/isb/lab_1/part1/crypted.txt'
-    shift = 3
-    encoder(input_file, output_file, shift)
+    json_file_path = 'C:/Users/zhura/Desktop/isb/lab_1/part1/params1.json'
+    encoder(json_file_path)
