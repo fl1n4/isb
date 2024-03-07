@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 
@@ -6,21 +7,16 @@ logging.basicConfig(level=logging.INFO)
 
 
 def encoder(json_file_path: str) -> None:
-    """
-    Encrypts text with monoalphabetic substitution and saves the modified text to a new file.
-    
-    :param input_file: The path to the source text file.
-    :param output_file: The path to the new text file where the modified text will be saved.
-    :param shift: The meaning of the alphabet shift.
-    """
     try:
         with open(json_file_path, 'r', encoding='utf-8') as json_file:
             params = json.load(json_file)
 
-        input_file = params.get('input_file')
-        output_file = params.get('output_file')
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+
+        input_file = os.path.join(current_directory, params.get('input_file'))
+        output_file = os.path.join(current_directory, params.get('output_file'))
         shift = params.get('shift')
-        key_file = params.get('key')
+        key_file = os.path.join(current_directory, params.get('key'))
 
         with open(input_file, 'r', encoding='utf-8') as file:
             text = file.read()
@@ -50,5 +46,5 @@ def encoder(json_file_path: str) -> None:
 
 
 if __name__ == '__main__':
-    json_file_path = 'C:/Users/zhura/Desktop/isb/lab_1/part1/params1.json'
+    json_file_path = 'part1/params1.json'
     encoder(json_file_path)
