@@ -6,22 +6,22 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def get_encoder_paths(params):
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    input_file = os.path.join(current_directory, params.get('input_file'))
-    output_file = os.path.join(current_directory, params.get('output_file'))
-    shift = params.get('shift')
-    key_file = os.path.join(current_directory, params.get('key'))
-    return {'input_file': input_file, 'output_file': output_file, 'shift': shift, 'key_file': key_file}
+def encoder(input_file:str, output_file:str,shift:int, key_file:str) -> None:
+    """
+    Encode the contents of the input file using a Caesar cipher with a specified shift value.
+    
+    Parameters:
+    - input_file (str): The path to the input file containing the text to be encoded.
+    - output_file (str): The path to the output file where the encoded text will be saved.
+    - shift (int): The number of positions to shift each alphabetic character in the text.
+    - key_file (str): The path to the output file where the encoding key will be saved in JSON format.
 
-def encoder(json_file_path: str) -> None:
+    Returns:
+    - None
+    """
+    
     try:
-        with open(json_file_path, 'r', encoding='utf-8') as json_file:
-            params = json.load(json_file)
-
-        paths = get_encoder_paths(params)
-
-        with open(paths['input_file'], 'r', encoding='utf-8') as file:
+        with open(input_file, 'r', encoding='utf-8') as file:
             text = file.read()
 
         encoder_text = ""
@@ -30,16 +30,16 @@ def encoder(json_file_path: str) -> None:
         for char in text:
             if char.isalpha():
                 base_char = 'а' if char.islower() else 'А'
-                encoded_char = chr((ord(char) - ord(base_char) + paths['shift']) % 32 + ord(base_char))
+                encoded_char = chr((ord(char) - ord(base_char) + shift) % 32 + ord(base_char))
                 encoder_text += encoded_char
                 encoding_dict[char] = encoded_char
             else:
                 encoder_text += char
 
-        with open(paths['output_file'], 'w', encoding='utf-8') as file:
+        with open(output_file, 'w', encoding='utf-8') as file:
             file.write(encoder_text)
 
-        with open(paths['key_file'], 'w', encoding='utf-8') as json_file:
+        with open(key_file, 'w', encoding='utf-8') as json_file:
             json.dump(encoding_dict, json_file, ensure_ascii=False)
 
     except FileNotFoundError as e:
@@ -49,5 +49,6 @@ def encoder(json_file_path: str) -> None:
 
 
 if __name__ == '__main__':
-    json_file_path = 'part1/params1.json'
-    encoder(json_file_path)
+    with open(os.path.join("lab_1","part1","params1.json"), 'r', encoding='utf-8') as json_file:
+            params = json.load(json_file)
+    encoder(params["input_file"],params["output_file"],params["shift"],params["key_file"])

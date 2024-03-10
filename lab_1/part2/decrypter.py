@@ -6,40 +6,30 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def get_file_paths(params):
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    input_file = os.path.join(current_directory, params.get('input_file'))
-    output_file = os.path.join(current_directory, params.get('output_file'))
-    key_file_path = os.path.join(current_directory, params.get('key'))
-    return {'input_file': input_file, 'output_file': output_file, 'key_file_path': key_file_path}
+def replace_letters(input_file:str, output_file:str, key_file_path:str) -> None:
+    """
+    Replace encoded letters in the input file using a provided key mapping.
 
-def replace_letters(params):
+    Parameters:
+    - input_file (str): The path to the input file containing the text with encoded letters.
+    - output_file (str): The path to the output file where the decoded text will be saved.
+    - key_file_path (str): The path to the JSON file containing the key mapping for letter replacement.
+
+    Returns:
+    - None
+    """
+    
     try:
-        with open(params, 'r', encoding='utf-8') as json_file:
-            params = json.load(json_file)
-        paths = get_file_paths(params)
-
-    except FileNotFoundError as e:
-        logging.error(f"File not found: {e.filename}")
-        return
-    except json.JSONDecodeError as e:
-        logging.error(f"Error decoding JSON: {e}")
-        return
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}")
-        return
-
-    try:
-        with open(paths['input_file'], 'r', encoding='utf-8') as file:
+        with open(input_file, 'r', encoding='utf-8') as file:
             text = file.read()
         
-        with open(paths['key_file_path'], 'r', encoding='utf-8') as key_file:
+        with open(key_file_path, 'r', encoding='utf-8') as key_file:
             key_mapping = json.load(key_file)
 
         for key, value in key_mapping.items():
             text = text.replace(value, key)
 
-        with open(paths['output_file'], 'w', encoding='utf-8') as file:
+        with open(output_file, 'w', encoding='utf-8') as file:
             file.write(text)
 
     except FileNotFoundError as e:
@@ -51,5 +41,6 @@ def replace_letters(params):
 
 
 if __name__ == '__main__':
-    json_file_path = 'part2/params2.json'
-    replace_letters(json_file_path)
+    with open(os.path.join("lab_1","part2","params2.json"), 'r', encoding='utf-8') as json_file:
+        params = json.load(json_file)
+    replace_letters(params["input_file"],params["output_file"],params["key"])
