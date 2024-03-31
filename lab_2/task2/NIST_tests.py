@@ -8,14 +8,14 @@ import mpmath
 pi = {0: 0.2148, 1: 0.3672, 2: 0.2305, 3: 0.1875}
 
 
-def frequency_test(bitstring):
+def frequency_test(bitstring:str) -> float:
     N = len(bitstring)
     sum_values = sum(1 if bit == '1' else -1 for bit in bitstring)
     p_value = erfc((sum_values) / sqrt(2*N))
     return p_value 
 
 
-def runs_test(bitstring):
+def runs_test(bitstring:str) -> float:
     N = len(bitstring)
     ones = bitstring.count('1')
     E = ones / N
@@ -27,7 +27,7 @@ def runs_test(bitstring):
         return p_value
     
 
-def longest_run_of_ones_test(bitstring):
+def longest_run_of_ones_test(bitstring:str) -> float:
     N = len(bitstring)
     block_size=8
     M = block_size
