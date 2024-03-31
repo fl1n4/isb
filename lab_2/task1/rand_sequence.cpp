@@ -5,6 +5,12 @@
 const int SIZE = 128;
 using namespace std;
 
+/**
+ * Generates a random binary sequence of a specified size.
+ *
+ * @return A string containing a random binary sequence.
+ */
+ 
 string generateRandomSequence() {
     string sequence;
     random_device rd;

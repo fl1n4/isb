@@ -9,6 +9,15 @@ pi = {0: 0.2148, 1: 0.3672, 2: 0.2305, 3: 0.1875}
 
 
 def frequency_test(bitstring:str) -> float:
+    """
+    Performs the frequency (monobit) test for the given bit sequence.
+
+    Parameters:
+    bitstring (str): The bit sequence to be tested.
+
+    Returns:
+    float: The p-value indicating the degree of agreement of the sequence with a uniform distribution.
+    """
     N = len(bitstring)
     sum_values = sum(1 if bit == '1' else -1 for bit in bitstring)
     p_value = erfc((sum_values) / sqrt(2*N))
@@ -16,6 +25,15 @@ def frequency_test(bitstring:str) -> float:
 
 
 def runs_test(bitstring:str) -> float:
+    """
+    Performs the runs test for the given bit sequence.
+
+    Parameters:
+    bitstring (str): The bit sequence to be tested.
+
+    Returns:
+    float: The p-value indicating the degree of randomness in the sequence of runs.
+    """
     N = len(bitstring)
     ones = bitstring.count('1')
     E = ones / N
@@ -28,6 +46,15 @@ def runs_test(bitstring:str) -> float:
     
 
 def longest_run_of_ones_test(bitstring:str) -> float:
+    """
+    Performs the longest run of ones test for the given bit sequence.
+
+    Parameters:
+    bitstring (str): The bit sequence to be tested.
+
+    Returns:
+    float: The p-value indicating the degree of randomness in the distribution of longest runs of ones.
+    """
     N = len(bitstring)
     block_size=8
     M = block_size
