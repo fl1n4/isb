@@ -88,13 +88,18 @@ def longest_run_of_ones_test(bitstring:str) -> float:
 
 
 if __name__ == "__main__":
-    with open(os.path.join("lab_2", "task1", "results_of_generators.json"), "r") as sequences:
+    with open(os.path.join("lab_2","task1","params.json"), "r") as paths:
+        path = json.load(paths)
+    path1 = path['path_input']
+    path2 = path['path_output']
+
+    with open(path1 , "r") as sequences:
         sequence = json.load(sequences)
 
     cpp_sequence = sequence['cpp']
     java_sequence = sequence['java']
 
-    with open(os.path.join("lab_2", "task2", "result_of_tests.txt"), 'w') as sequences:
+    with open(path2, 'w') as sequences:
         sequences.write("Results(C++)\n")
         sequences.write(str(frequency_test(cpp_sequence)) + '\n')
         sequences.write(str(runs_test(cpp_sequence)) + '\n')
