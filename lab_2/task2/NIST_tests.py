@@ -2,7 +2,6 @@ import logging
 import os
 import json
 from math import sqrt, pow, erfc, fabs
-"""from scipy.special import erfc"""
 import mpmath
 
 
