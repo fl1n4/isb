@@ -1,8 +1,8 @@
 import logging
 import os
 import json
-from math import sqrt, pow
-from scipy.special import erfc
+from math import sqrt, pow, erfc, fabs
+"""from scipy.special import erfc"""
 import mpmath
 
 
@@ -24,7 +24,7 @@ def frequency_test(bitstring:str) -> float:
     """
     try:
         N = len(bitstring)
-        sum_values = sum(1 if bit == '1' else -1 for bit in bitstring)
+        sum_values = fabs(sum(1 if bit == '1' else -1 for bit in bitstring))
         p_value = erfc((sum_values) / sqrt(2*N))
         return p_value
     except Exception as ex:
