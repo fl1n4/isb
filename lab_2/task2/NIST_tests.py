@@ -1,8 +1,9 @@
+import json
 import logging
 import os
-import json
-from math import sqrt, pow, erfc, fabs
 import mpmath
+from math import erfc, fabs, pow, sqrt
+
 
 
 logging.basicConfig(level=logging.INFO)
@@ -66,8 +67,7 @@ def longest_run_of_ones_test(bitstring:str) -> float:
     """
     try:
         N = len(bitstring)
-        block_size=8
-        M = block_size
+        M = 8 #block size
 
         max_run_lengths = [max(len(run) for run in block.split('0')) for block in [bitstring[i:i+M] for i in range(0, N, M)]]
 
@@ -88,24 +88,33 @@ def longest_run_of_ones_test(bitstring:str) -> float:
 
 
 if __name__ == "__main__":
-    with open(os.path.join("lab_2","task1","params.json"), "r") as paths:
-        path = json.load(paths)
-    path1 = path['path_input']
-    path2 = path['path_output']
+    try:
+        with open(os.path.join("lab_2","task1","params.json"), "r") as paths:
+            path = json.load(paths)
+        path1 = path['path_input']
+        path2 = path['path_output']
 
-    with open(path1 , "r") as sequences:
-        sequence = json.load(sequences)
+        with open(path1 , "r") as sequences:
+            sequence = json.load(sequences)
 
-    cpp_sequence = sequence['cpp']
-    java_sequence = sequence['java']
+        cpp_sequence = sequence['cpp']
+        java_sequence = sequence['java']
 
-    with open(path2, 'w') as sequences:
-        sequences.write("Results(C++)\n")
-        sequences.write(str(frequency_test(cpp_sequence)) + '\n')
-        sequences.write(str(runs_test(cpp_sequence)) + '\n')
-        sequences.write(str(longest_run_of_ones_test(cpp_sequence)) + '\n')
+        with open(path2, 'w') as sequences:
+            sequences.write("Results(C++)\n")
+            sequences.write(str(frequency_test(cpp_sequence)) + '\n')
+            sequences.write(str(runs_test(cpp_sequence)) + '\n')
+            sequences.write(str(longest_run_of_ones_test(cpp_sequence)) + '\n')
 
-        sequences.write("\nResults(Java)\n")
-        sequences.write(str(frequency_test(java_sequence)) + '\n')
-        sequences.write(str(runs_test(java_sequence)) + '\n')
-        sequences.write(str(longest_run_of_ones_test(java_sequence)) + '\n')
+            sequences.write("\nResults(Java)\n")
+            sequences.write(str(frequency_test(java_sequence)) + '\n')
+            sequences.write(str(runs_test(java_sequence)) + '\n')
+            sequences.write(str(longest_run_of_ones_test(java_sequence)) + '\n')
+    except FileNotFoundError:
+        logging.error("File not found.")
+    except json.JSONDecodeError:
+        logging.error("Error decoding JSON.")
+    except KeyError as e:
+        logging.error(f"KeyError: {e}")
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
