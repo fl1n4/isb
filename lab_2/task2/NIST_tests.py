@@ -5,7 +5,6 @@ import mpmath
 from math import erfc, fabs, pow, sqrt
 
 
-
 logging.basicConfig(level=logging.INFO)
 
 
@@ -67,7 +66,7 @@ def longest_run_of_ones_test(bitstring:str) -> float:
     """
     try:
         N = len(bitstring)
-        M = 8 #block size
+        M = 8
 
         max_run_lengths = [max(len(run) for run in block.split('0')) for block in [bitstring[i:i+M] for i in range(0, N, M)]]
 
@@ -110,10 +109,10 @@ if __name__ == "__main__":
             sequences.write(str(frequency_test(java_sequence)) + '\n')
             sequences.write(str(runs_test(java_sequence)) + '\n')
             sequences.write(str(longest_run_of_ones_test(java_sequence)) + '\n')
-    except FileNotFoundError:
-        logging.error("File not found.")
-    except json.JSONDecodeError:
-        logging.error("Error decoding JSON.")
+    except FileNotFoundError as e:
+        logging.error(f"File not found: {e.filename}")
+    except json.JSONDecodeError as e:
+        logging.error(f"Error decoding JSON: {e}")
     except KeyError as e:
         logging.error(f"KeyError: {e}")
     except Exception as e:
