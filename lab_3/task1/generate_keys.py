@@ -6,7 +6,6 @@ from cryptography.hazmat.primitives import (hashes,
                                             serialization)
 
 
-
 def generate_hybrid_keys(sym_key_path, public_key_path, private_key_path):
     # Генерация ключа для симметричного алгоритма
     sym_key = os.urandom(16)
