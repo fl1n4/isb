@@ -1,13 +1,15 @@
 import os
+
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives import padding
-from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import (hashes,
+                                            padding,
+                                            serialization)
+
 
 
 def generate_hybrid_keys(sym_key_path, public_key_path, private_key_path):
     # Генерация ключа для симметричного алгоритма
-    sym_key = os.urandom(32)  # 256 битный ключ
+    sym_key = os.urandom(16)
     
     # Генерация ключей для асимметричного алгоритма (RSA)
     private_key = rsa.generate_private_key(

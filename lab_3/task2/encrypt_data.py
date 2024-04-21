@@ -1,8 +1,11 @@
 import os
-from cryptography.hazmat.primitives import padding
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+from cryptography.hazmat.primitives import (hashes,
+                                            padding,
+                                            serialization)
+from cryptography.hazmat.primitives.ciphers import (Cipher, 
+                                                    algorithms, 
+                                                    modes)
 
 
 def encrypt_data_hybrid(text_file_path, private_key_path, encrypted_sym_key_path, encrypted_text_path):
@@ -29,7 +32,7 @@ def encrypt_data_hybrid(text_file_path, private_key_path, encrypted_sym_key_path
     
     # Шифрование текста симметричным алгоритмом
     iv = os.urandom(16)
-    cipher = Cipher(algorithms.AES(sym_key), modes.CFB(iv))
+    cipher = Cipher(algorithms.CAST5(sym_key), modes.CFB(iv))
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(plaintext) + encryptor.finalize()
     
