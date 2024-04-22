@@ -1,9 +1,10 @@
 import argparse
 import json
 
-from generate_keys import HybridKeyGenerator
-from encrypt_data import HybridEncryptor
-from decrypt_data import HybridDecryptor
+from task1.generate_keys import HybridKeyGenerator
+from task2.encrypt_data import HybridEncryptor
+from task3.decrypt_data import HybridDecryptor
+
 
 def load_paths_from_json(json_file):
     with open(json_file, "r") as file:

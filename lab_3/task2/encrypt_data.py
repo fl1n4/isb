@@ -1,5 +1,6 @@
 import os
 
+from cryptography.hazmat.primitives.asymmetric import padding as asymmetric_padding
 from cryptography.hazmat.primitives import (hashes,
                                             padding,
                                             serialization)
@@ -30,17 +31,19 @@ class HybridEncryptor:
         
         sym_key = private_key.decrypt(
             encrypted_sym_key,
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            asymmetric_padding.OAEP(
+                mgf=asymmetric_padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
                 label=None
             )
         )
 
-        iv = os.urandom(16)
-        cipher = Cipher(algorithms.CAST5(sym_key), modes.CFB(iv))
+        iv = os.urandom(8)
+        cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
         encryptor = cipher.encryptor()
-        ciphertext = encryptor.update(plaintext) + encryptor.finalize()
+        padder = padding.PKCS7(128).padder()
+        padded_text = padder.update(plaintext) + padder.finalize()
+        ciphertext = iv + encryptor.update(padded_text) + encryptor.finalize()
 
         with open(self.encrypted_text_path, "wb") as encrypted_text_file:
             encrypted_text_file.write(ciphertext)

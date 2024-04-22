@@ -1,0 +1,8 @@
+{
+    "public_key_path":"lab_3/keys/public_key.pem",
+    "private_key_path":"lab_3/keys/private_key.pem",
+    "text_file_path":"lab_3/texts/text.txt",
+    "encrypted_sym_key_path":"lab_3/keys/encrypted_symmetric_key.txt",
+    "encrypted_text_path":"lab_3/texts/encrypted_text.txt",
+    "decrypted_text_path":"lab_3/texts/decrypted_text.txt"
+}

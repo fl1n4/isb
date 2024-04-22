@@ -1,3 +1,6 @@
+import os
+
+from cryptography.hazmat.primitives.asymmetric import padding as asymetric_padding
 from cryptography.hazmat.primitives import (hashes,
                                             padding,
                                             serialization)
@@ -28,16 +31,21 @@ class HybridDecryptor:
         
         sym_key = private_key.decrypt(
             encrypted_sym_key,
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            asymetric_padding.OAEP(
+                mgf = asymetric_padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
                 label=None
             )
         )
 
-        cipher = Cipher(algorithms.CAST5(sym_key), modes.CFB())
+        iv = ciphertext[:8]
+        ciphertext = ciphertext[8:]
+        cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
         decryptor = cipher.decryptor()
+
         plaintext = decryptor.update(ciphertext) + decryptor.finalize()
+        unpadder = padding.PKCS7(128).unpadder()
+        plaintext = unpadder.update(plaintext) + unpadder.finalize()
 
         with open(self.decrypted_text_path, "wb") as decrypted_text_file:
             decrypted_text_file.write(plaintext)
