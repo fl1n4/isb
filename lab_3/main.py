@@ -32,15 +32,15 @@ def main():
     else:
         decrypt_data(paths)
 
-def generate_keys(paths):
+def generate_keys(paths:str) -> None:
     key_generator = HybridKeyGenerator(paths["sym_key_path"], paths["public_key_path"], paths["private_key_path"])
     key_generator.generate_keys()
 
-def encrypt_data(paths):
+def encrypt_data(paths:str) -> None:
     encryptor = HybridEncryptor(paths["text_file_path"], paths["private_key_path"], paths["encrypted_sym_key_path"], paths["encrypted_text_path"])
     encryptor.encrypt_data()
 
-def decrypt_data(paths):
+def decrypt_data(paths:str) -> None:
     decryptor = HybridDecryptor(paths["encrypted_text_path"], paths["private_key_path"], paths["encrypted_sym_key_path"], paths["decrypted_text_path"])
     decryptor.decrypt_data()
 
