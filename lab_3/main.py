@@ -8,13 +8,13 @@ def main():
     parser = argparse.ArgumentParser(description="Single entry point for key generation, encryption, and decryption.")
     parser.add_argument('mode', choices=['gen', 'enc', 'dec'], help='Mode of operation')
 
-    parser.add_argument('-k', '--key_length', type=int, default=256, help='Length of the symmetric key in bits (default: 256).')
-    parser.add_argument('-t', '--text_file', type=str, default='text.txt', help='Path to the text file (default: text.txt).')
-    parser.add_argument('-pk', '--public_key', type=str, default='public_key.pem', help='Path to the public key file (default: public_key.pem).')
-    parser.add_argument('-sk', '--private_key', type=str, default='private_key.pem', help='Path to the private key file (default: private_key.pem).')
-    parser.add_argument('-skf', '--symmetric_key_file', type=str, default='sym_key.bin', help='Path to the symmetric key file (default: sym_key.bin).')
-    parser.add_argument('-et', '--encrypted_text_file', type=str, default='encrypted_text.txt', help='Path to the encrypted text file (default: encrypted_text.txt).')
-    parser.add_argument('-dt', '--decrypted_text_file', type=str, default='decrypted_text.txt', help='Path to the decrypted text file (default: decrypted_text.txt).')
+    parser.add_argument('-k', '--key_length', type=int, default=128, help='Length of the symmetric key in bits (default: 128).')
+    parser.add_argument('-t', '--text_file', type=str, default='lab_3/texts/text.txt', help='Path to the text file (default: lab_3/texts/text.txt).')
+    parser.add_argument('-pk', '--public_key', type=str, default='lab_3/keys/public_key.pem', help='Path to the public key file (default: lab_3/keys/public_key.pem).')
+    parser.add_argument('-sk', '--private_key', type=str, default='lab_3/keys/private_key.pem', help='Path to the private key file (default: lab_3/keys/private_key.pem).')
+    parser.add_argument('-skf', '--symmetric_key_file', type=str, default='lab_3/keys/sym_key.txt', help='Path to the symmetric key file (default: lab_3/keys/sym_key.txt).')
+    parser.add_argument('-et', '--encrypted_text_file', type=str, default='lab_3/texts/encrypted_text.txt', help='Path to the encrypted text file (default: lab_3/texts/encrypted_text.txt).')
+    parser.add_argument('-dt', '--decrypted_text_file', type=str, default='lab_3/texts/decrypted_text.txt', help='Path to the decrypted text file (default: lab_3/texts/decrypted_text.txt).')
 
     args = parser.parse_args()
 
@@ -24,20 +24,26 @@ def main():
 
     match args.mode:
         case 'gen':
+            sym_key = symm_crypt.generate_key()
             private_key, public_key = asymm_crypt.generate_key_pair()
+            encrypted_sym_key = asymm_crypt.encrypt_with_public_key(public_key, sym_key)
+            help_func.write_to_file(args.symmetric_key_file, encrypted_sym_key)
             help_func.serialization_private_key(private_key, args.private_key)
             help_func.serialization_public_key(public_key, args.public_key)
 
         case 'enc':
-            _, public_key = asymm_crypt.generate_key_pair()
-            sym_key = symm_crypt.generate_key()
-            encrypted_sym_key = asymm_crypt.encrypt_with_public_key(public_key, sym_key)
-            help_func.write_to_file(args.symmetric_key_file, encrypted_sym_key)
-            symm_crypt.encrypt_text(sym_key, args.encrypted_text_file, args.text_file)
+            private_key = help_func.deserialization_private_key(args.private_key)
+            encrypted_sym_key = help_func.read_file(args.symmetric_key_file)
+            decrypted_sym_key = asymm_crypt.decrypt_with_private_key(private_key, encrypted_sym_key)
+            text = help_func.read_file(args.text_file)
+            symm_crypt.encrypt_text(decrypted_sym_key, args.encrypted_text_file, text)
 
         case 'dec':
-            sym_key = help_func.read_from_file(args.symmetric_key_file)
-            symm_crypt.decrypt_text(sym_key, args.encrypted_text_file)
+            private_key = help_func.deserialization_private_key(args.private_key)
+            encrypted_sym_key = help_func.read_file(args.symmetric_key_file)
+            decrypted_sym_key = asymm_crypt.decrypt_with_private_key(private_key, encrypted_sym_key)
+            ciphertext = help_func.read_file(args.encrypted_text_file)
+            symm_crypt.decrypt_text(decrypted_sym_key, args.decrypted_text_file, ciphertext)
 
 if __name__ == "__main__":
     main()

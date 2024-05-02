@@ -13,7 +13,7 @@ class SymmCrypt:
     def generate_key(self) -> bytes:
         return os.urandom(self.key_len//8)
     
-    def encrypt_text(self, sym_key:bytes, encrypted_text_path: bytes, text: bytes) -> None:
+    def encrypt_text(self, sym_key: bytes, encrypted_text_path: bytes, text: bytes) -> None:
         iv = os.urandom(8)
         cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
         encryptor = cipher.encryptor()
@@ -24,7 +24,7 @@ class SymmCrypt:
         with open(encrypted_text_path, "wb") as encrypted_text_file:
             encrypted_text_file.write(ciphertext)
     
-    def decrypt_text(self, sym_key: bytes, decrypted_text_path: str) -> None:
+    def decrypt_text(self, sym_key: bytes, decrypted_text_path: str, ciphertext: bytes) -> None:
         iv = ciphertext[:8]
         ciphertext = ciphertext[8:]
         cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
