@@ -4,6 +4,7 @@ from AsymmCrypt import AsymmCrypt
 from SymmCrypt import SymmCrypt
 from HelpFunc import HelpFunc
 
+
 def main():
     parser = argparse.ArgumentParser(description="Single entry point for key generation, encryption, and decryption.")
     parser.add_argument('mode', choices=['gen', 'enc', 'dec'], help='Mode of operation')
@@ -44,6 +45,7 @@ def main():
             decrypted_sym_key = asymm_crypt.decrypt_with_private_key(private_key, encrypted_sym_key)
             ciphertext = help_func.read_file(args.encrypted_text_file)
             symm_crypt.decrypt_text(decrypted_sym_key, args.decrypted_text_file, ciphertext)
+
 
 if __name__ == "__main__":
     main()
