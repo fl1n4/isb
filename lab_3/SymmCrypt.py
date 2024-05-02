@@ -1,10 +1,12 @@
 import os
+import logging
 
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import (Cipher, 
                                                     algorithms, 
                                                     modes)
 
+logging.basicConfig(level=logging.INFO)
 
 class SymmCrypt:
     """
@@ -35,7 +37,10 @@ class SymmCrypt:
         Returns:
             bytes: The generated symmetric key.
         """
-        return os.urandom(self.key_len//8)
+        try:
+            return os.urandom(self.key_len//8)
+        except Exception as e:
+            logging.error(f"Failed to generate key: {e}")
     
     def encrypt_text(self, sym_key: bytes, encrypted_text_path: bytes, text: bytes) -> None:
         """
@@ -46,15 +51,18 @@ class SymmCrypt:
             encrypted_text_path (bytes): The path where the encrypted text will be saved.
             text (bytes): The text to be encrypted.
         """
-        iv = os.urandom(8)
-        cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
-        encryptor = cipher.encryptor()
-        padder = padding.PKCS7(128).padder()
-        padded_text = padder.update(text) + padder.finalize()
-        ciphertext = iv + encryptor.update(padded_text) + encryptor.finalize()
+        try:
+            iv = os.urandom(8)
+            cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
+            encryptor = cipher.encryptor()
+            padder = padding.PKCS7(128).padder()
+            padded_text = padder.update(text) + padder.finalize()
+            ciphertext = iv + encryptor.update(padded_text) + encryptor.finalize()
 
-        with open(encrypted_text_path, "wb") as encrypted_text_file:
-            encrypted_text_file.write(ciphertext)
+            with open(encrypted_text_path, "wb") as encrypted_text_file:
+                encrypted_text_file.write(ciphertext)
+        except Exception as e:
+            logging.error(f"Failed to encrypt text: {e}")
     
     def decrypt_text(self, sym_key: bytes, decrypted_text_path: str, ciphertext: bytes) -> None:
         """
@@ -65,14 +73,17 @@ class SymmCrypt:
             decrypted_text_path (str): The path where the decrypted text will be saved.
             ciphertext (bytes): The ciphertext to be decrypted.
         """
-        iv = ciphertext[:8]
-        ciphertext = ciphertext[8:]
-        cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
-        decryptor = cipher.decryptor()
+        try:
+            iv = ciphertext[:8]
+            ciphertext = ciphertext[8:]
+            cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
+            decryptor = cipher.decryptor()
 
-        plaintext = decryptor.update(ciphertext) + decryptor.finalize()
-        unpadder = padding.PKCS7(128).unpadder()
-        plaintext = unpadder.update(plaintext) + unpadder.finalize()
+            plaintext = decryptor.update(ciphertext) + decryptor.finalize()
+            unpadder = padding.PKCS7(128).unpadder()
+            plaintext = unpadder.update(plaintext) + unpadder.finalize()
 
-        with open(decrypted_text_path, "wb") as decrypted_text_file:
-            decrypted_text_file.write(plaintext)
+            with open(decrypted_text_path, "wb") as decrypted_text_file:
+                decrypted_text_file.write(plaintext)
+        except Exception as e:
+            logging.error(f"Failed to decrypt text: {e}")
