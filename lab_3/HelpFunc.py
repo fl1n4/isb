@@ -26,7 +26,8 @@ class HelpFunc:
                 ))
         except Exception as e:
             logging.error(f"Failed to serialize public key: {e}")
-            
+
+
     def serialization_private_key(self, private_key: bytes, private_key_path: str) -> None:
         """
         Serialize a private key to a file.
@@ -44,7 +45,8 @@ class HelpFunc:
                 ))   
         except Exception as e:
             logging.error(f"Failed to serialize private key: {e}")
-            
+
+
     def deserialization_private_key(self, private_key_path: str) -> rsa.RSAPrivateKey:
         """
         Deserialize a private key from a file.
@@ -63,33 +65,37 @@ class HelpFunc:
                     )
         except Exception as e:
             logging.error(f"Failed to deserialize private key: {e}")
-                
-    def write_to_file(self, sym_key_path: str,encrypted_sym_key: bytes) -> None:
+
+
+    @classmethod           
+    def write_to_file(self, path: str, bytes_text: bytes) -> None:
         """
         Write encrypted symmetric key bytes to a file.
 
         Args:
-            sym_key_path (str): The path to save the encrypted symmetric key.
-            encrypted_sym_key (bytes): The encrypted symmetric key bytes.
+            path (str): The path to save the data.
+            bytes_text (bytes): The bytes.
         """
         try:
-            with open(sym_key_path, "wb") as sym_key_file:
-                sym_key_file.write(encrypted_sym_key)
+            with open(path, "wb") as sym_key_file:
+                sym_key_file.write(bytes_text)
         except Exception as e:
             logging.error(f"Failed to write to file: {e}")
-            
-    def read_file(self, sym_key_path: str) -> bytes:
+
+
+    @classmethod
+    def read_file(self, path: str) -> bytes:
         """
         Read bytes from a file.
 
         Args:
-            sym_key_path (str): The path to the file to be read.
+            path (str): The path to the file to be read.
 
         Returns:
             bytes: The bytes read from the file.
         """
         try:
-            with open(sym_key_path, 'rb') as sym_key_file:
+            with open(path, 'rb') as sym_key_file:
                 return sym_key_file.read()
         except Exception as e:
             logging.error(f"Failed to read file: {e}")   

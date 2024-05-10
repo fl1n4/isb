@@ -34,6 +34,7 @@ class AsymmCrypt:
         except Exception as e:
             logging.error(f"Failed to generate key pair: {e}")
     
+
     def encrypt_with_public_key(self, public_key: rsa.RSAPublicKey, sym_key: bytes) -> bytes:
         """
         Encrypts a symmetric key with the provided RSA public key.
@@ -57,6 +58,7 @@ class AsymmCrypt:
             return encrypted_sym_key
         except Exception as e:
             logging.error(f"Failed to encrypt with public key: {e}")
+    
     
     def decrypt_with_private_key(self, private_key: rsa.RSAPrivateKey, ciphertext: bytes) -> bytes:
         """
