@@ -42,7 +42,7 @@ class SymmCrypt:
         except Exception as e:
             logging.error(f"Failed to generate key: {e}")
     
-    def encrypt_text(self, sym_key: bytes, encrypted_text_path: bytes, text: bytes) -> None:
+    def encrypt_text(self, sym_key: bytes, encrypted_text_path: str, iv_path: str, text: bytes) -> None:
         """
         Encrypts the given text using the symmetric key and saves the encrypted text to a file.
 
@@ -59,12 +59,15 @@ class SymmCrypt:
             padded_text = padder.update(text) + padder.finalize()
             ciphertext = iv + encryptor.update(padded_text) + encryptor.finalize()
 
+            with open(iv_path, "wb") as iv_file:
+                iv_file.write(iv)
+
             with open(encrypted_text_path, "wb") as encrypted_text_file:
-                encrypted_text_file.write(ciphertext)
+                encrypted_text_file.write(ciphertext[8:])
         except Exception as e:
             logging.error(f"Failed to encrypt text: {e}")
     
-    def decrypt_text(self, sym_key: bytes, decrypted_text_path: str, ciphertext: bytes) -> None:
+    def decrypt_text(self, sym_key: bytes, decrypted_text_path: str, iv_path:str, ciphertext_path: str) -> None:
         """
         Decrypts the given ciphertext using the symmetric key and saves the decrypted text to a file.
 
@@ -74,8 +77,12 @@ class SymmCrypt:
             ciphertext (bytes): The ciphertext to be decrypted.
         """
         try:
-            iv = ciphertext[:8]
-            ciphertext = ciphertext[8:]
+            with open(iv_path, "rb") as iv_file:
+                iv = iv_file.read()
+
+            with open(ciphertext_path, "rb") as ciphertext_file:
+                ciphertext = ciphertext_file.read()
+
             cipher = Cipher(algorithms.CAST5(sym_key), modes.CBC(iv))
             decryptor = cipher.decryptor()
 
