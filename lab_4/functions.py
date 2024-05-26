@@ -103,7 +103,6 @@ def analysis_time_search_hash_collision(hash: str, last_digits: str, bins: list)
         plt.xlabel("Количество процессов, Шт")
         plt.ylabel("Время, С")
         plt.title("График зависимости времени поиска коллизии от числа процессов")
-        plt.legend()
         plt.show()
     except Exception as ex:
         logging.error(ex)
