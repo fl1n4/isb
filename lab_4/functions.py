@@ -30,3 +30,29 @@ def check_number_card(tested_part: int, hash: str, last_digits: str, bins: list)
             logging.info(f"Match found: {card_number}")
             return card_number
     return None
+
+
+def number_search(save_path: str, hash: str, last_digits: str, bins: list) -> str:
+    """
+    Search for credit card numbers using hash, and save them to a file.
+    The function uses multiple processes to reduce the search time.
+    args:
+        save_path: the path to save the card's number
+        hash: input hash of number
+        last_digits: last 4 digits of card's number
+        bins: bins
+    return:
+        number of card if it matches with hash
+    """
+    card_numbers = None
+    with mp.Pool(mp.cpu_count()) as p:
+        for result in p.starmap(check_number_card, [(i, hash, last_digits, bins) for i in range(0, 1000000)]):
+            if result is not None:
+                card_numbers = result
+                break
+    try:
+        with open(save_path, mode='w', encoding="utf-8") as file:
+            json.dump({"card_number": card_numbers}, file)
+    except Exception as ex:
+        logging.error(ex)
+    return card_numbers
