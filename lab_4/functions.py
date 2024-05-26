@@ -74,3 +74,36 @@ def luna_algorithm(card_number: str) -> bool:
     except Exception as ex:
         logging.error(ex)
         return False
+    
+
+def analysis_time_search_hash_collision(hash: str, last_digits: str, bins: list) -> None:
+    """
+    Measuring the time for searching for hash function collisions and
+    plotting the time dependence on the number of processes spent.
+    args:
+        hash: input hash of number
+        last_digits: last 4 digits of card's number
+        bins: bins
+    """
+    try:
+        times = []
+        num_cores = int(mp.cpu_count() * 1.5)
+        
+        for i in tqdm(range(1, num_cores + 1), desc='Поиск коллизии'):
+            start_time = time.time()
+            with mp.Pool(i) as pool:
+                results = pool.starmap(check_number_card, [(j, hash, last_digits, bins) for j in range(1000000)])
+                for result in results:
+                    if result is not None:
+                        break
+            elapsed_time = time.time() - start_time
+            times.append(elapsed_time)
+        
+        plt.plot(range(1, num_cores + 1), times, color="green", marker="o", markersize=7)
+        plt.xlabel("Количество процессов, Шт")
+        plt.ylabel("Время, С")
+        plt.title("График зависимости времени поиска коллизии от числа процессов")
+        plt.legend()
+        plt.show()
+    except Exception as ex:
+        logging.error(ex)
