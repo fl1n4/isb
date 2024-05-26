@@ -1,7 +1,5 @@
-import os
 import json
 import logging
-import argparse
 import hashlib
 import multiprocessing as mp
 import time
@@ -56,3 +54,23 @@ def number_search(save_path: str, hash: str, last_digits: str, bins: list) -> st
     except Exception as ex:
         logging.error(ex)
     return card_numbers
+
+
+def luna_algorithm(card_number: str) -> bool:
+    """
+    Checking the credit card number using the Luhn algorithm
+    args:
+        card_number: number of card
+    return:
+        result of the check
+    """
+    try:
+        card_number_list = [int(char) for char in card_number]
+        for i in range(len(card_number_list) - 2, -1, -2):
+            card_number_list[i] *= 2
+            if card_number_list[i] > 9:
+                card_number_list[i] -= 9
+        return sum(card_number_list) % 10 == 0
+    except Exception as ex:
+        logging.error(ex)
+        return False
